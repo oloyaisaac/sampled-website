@@ -15,14 +15,21 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const imageBase = import.meta.env.BASE_URL;
 const photoFiles = {
   threshold: 'rome-threshold.webp',
+  via: 'rome-via-sacra.webp',
   street: 'rome-street-life.webp',
-  colosseum: 'rome-colosseum.webp',
+  approach: 'rome-colosseum-approach.webp',
+  entry: 'rome-colosseum-entry.webp',
+  passage: 'rome-colosseum-passage.webp',
+  arena: 'rome-arena-floor.webp',
+  exit: 'rome-colosseum-exit.webp',
   forum: 'rome-forum.webp'
 };
 const photoPromises = new Map();
-let activeLayer = -1;
-let requestedPhoto = '';
-let photoRequest = 0;
+let timeline = [];
+let renderedPair = '';
+let requestedPair = '';
+let pairRequest = 0;
+let blend = 0;
 let scrollFrame = 0;
 
 function loadPhoto(name) {
@@ -38,17 +45,75 @@ function loadPhoto(name) {
   return photoPromises.get(name);
 }
 
-async function showPhoto(name) {
-  if (!photoFiles[name] || name === requestedPhoto) return;
-  requestedPhoto = name;
-  const request = ++photoRequest;
-  const src = await loadPhoto(name);
-  if (request !== photoRequest) return;
-  const nextLayer = activeLayer === 0 ? 1 : 0;
-  photoLayers[nextLayer].style.backgroundImage = `url("${src}")`;
-  photoLayers[nextLayer].classList.add('is-active');
-  if (activeLayer >= 0) photoLayers[activeLayer].classList.remove('is-active');
-  activeLayer = nextLayer;
+function applyBlend(amount) {
+  blend = amount;
+  if (!renderedPair) return;
+  const [from, to] = renderedPair.split('|');
+  const eased = amount * amount * (3 - 2 * amount);
+  photoLayers[0].style.opacity = from === to ? '1' : String(1 - eased);
+  photoLayers[1].style.opacity = from === to ? '0' : String(eased);
+
+  // A gentle forward push is tied to scroll position, not a timed animation.
+  const zoom = reducedMotion ? 0 : amount * 0.16;
+  const drift = reducedMotion ? 0 : amount * 1.3;
+  photoLayers[0].style.transform = `scale(${1 + zoom}) translate3d(0, ${-drift}%, 0)`;
+  photoLayers[1].style.transform = `scale(${1 + (reducedMotion ? 0 : (1 - amount) * 0.16)}) translate3d(0, ${reducedMotion ? 0 : (1 - amount) * 1.3}%, 0)`;
+}
+
+function renderPhotoPair(from, to, amount) {
+  const key = `${from}|${to}`;
+  blend = amount;
+  if (key === renderedPair) {
+    if (requestedPair !== key) {
+      requestedPair = key;
+      pairRequest++;
+    }
+    applyBlend(amount);
+    return;
+  }
+  if (key === requestedPair) return;
+
+  requestedPair = key;
+  const request = ++pairRequest;
+  Promise.all([loadPhoto(from), loadPhoto(to)]).then(([fromUrl, toUrl]) => {
+    if (request !== pairRequest) return;
+    photoLayers[0].style.backgroundImage = `url("${fromUrl}")`;
+    photoLayers[1].style.backgroundImage = `url("${toUrl}")`;
+    renderedPair = key;
+    applyBlend(blend);
+  });
+}
+
+function rebuildTimeline() {
+  const top = id => {
+    const section = document.getElementById(id);
+    return section.getBoundingClientRect().top + scrollY;
+  };
+  const colosseumTop = top('colosseum');
+  const forumTop = top('forum');
+  timeline = [
+    { at: top('home'), photo: 'threshold' },
+    { at: top('city'), photo: 'via' },
+    { at: top('life'), photo: 'street' },
+    { at: colosseumTop, photo: 'approach' },
+    { at: colosseumTop + innerHeight * 0.2, photo: 'entry' },
+    { at: colosseumTop + innerHeight * 0.43, photo: 'passage' },
+    { at: colosseumTop + innerHeight * 0.68, photo: 'arena' },
+    { at: forumTop - innerHeight * 0.25, photo: 'exit' },
+    { at: forumTop, photo: 'forum' }
+  ].sort((a, b) => a.at - b.at);
+}
+
+function renderJourney() {
+  if (!timeline.length) return;
+  const position = scrollY;
+  let index = 0;
+  while (index < timeline.length - 2 && position >= timeline[index + 1].at) index++;
+  const from = timeline[index];
+  const to = timeline[Math.min(index + 1, timeline.length - 1)];
+  const distance = Math.max(1, to.at - from.at);
+  const amount = Math.max(0, Math.min(1, (position - from.at) / distance));
+  renderPhotoPair(from.photo, to.photo, amount);
 }
 
 function updateJourney() {
@@ -58,7 +123,7 @@ function updateJourney() {
     if (section.getBoundingClientRect().top <= focus) active = index;
   });
   railLinks.forEach((link, index) => link.classList.toggle('active', index === active));
-  showPhoto(sections[active]?.dataset.photo);
+  renderJourney();
 
   const maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight);
   const progress = Math.max(0, Math.min(1, scrollY / maxScroll));
@@ -87,7 +152,10 @@ if ('IntersectionObserver' in window) {
   sections.forEach(section => section.classList.add('in-view'));
 }
 
-addEventListener('resize', scheduleJourneyUpdate, { passive: true });
+addEventListener('resize', () => {
+  rebuildTimeline();
+  scheduleJourneyUpdate();
+}, { passive: true });
 addEventListener('scroll', scheduleJourneyUpdate, { passive: true });
 
 document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -152,6 +220,7 @@ document.querySelector('#booking-form').addEventListener('submit', event => {
   form.querySelector('.reserve-button span:first-child').textContent = 'VISIT RESERVED';
 });
 
-showPhoto(sections[0]?.dataset.photo).finally(() => document.body.classList.add('loaded'));
+rebuildTimeline();
 updateJourney();
+Promise.all([loadPhoto('threshold'), loadPhoto('via')]).finally(() => document.body.classList.add('loaded'));
 setTimeout(() => document.body.classList.add('loaded'), 1800);
