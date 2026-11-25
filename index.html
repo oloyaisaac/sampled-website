@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#171b2b" />
+  <meta name="description" content="Aurelia Museum — an immersive journey through the Eternal City. The city is waiting beneath the stone." />
+  <title>Aurelia — Rome, remembered</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="loader" aria-hidden="true"><span class="loader-mark">A</span><span class="loader-line"></span><span class="loader-caption">A city, waiting to be remembered</span></div>
+  <canvas id="world" aria-hidden="true"></canvas>
+  <canvas id="world3d" aria-hidden="true"></canvas>
+  <div class="grain" aria-hidden="true"></div>
+  <div class="page-vignette" aria-hidden="true"></div>
+  <header class="topbar">
+    <a class="wordmark" href="#home" aria-label="Aurelia Museum home"><span class="seal">A</span><span>AURELIA<small>MUSEUM · ROMA</small></span></a>
+    <div class="topbar-center"><span class="live-dot"></span> A NEW EXHIBITION <span class="bar-divider">/</span> 18 APR — 30 SEP 2027</div>
+    <a href="#tickets" class="nav-ticket">Plan your visit <span>↗</span></a>
+  </header>
+  <aside class="chapter-rail" aria-label="Journey chapters">
+    <span class="rail-label">THE JOURNEY</span>
+    <div class="rail-items">
+      <a href="#home" class="rail-item active" data-chapter="0"><i>01</i><span>The threshold</span></a>
+      <a href="#city" class="rail-item" data-chapter="1"><i>02</i><span>The city</span></a>
+      <a href="#life" class="rail-item" data-chapter="2"><i>03</i><span>Daily life</span></a>
+      <a href="#colosseum" class="rail-item" data-chapter="3"><i>04</i><span>The arena</span></a>
+      <a href="#forum" class="rail-item" data-chapter="4"><i>05</i><span>The forum</span></a>
+      <a href="#legacy" class="rail-item" data-chapter="5"><i>06</i><span>What remains</span></a>
+      <a href="#tickets" class="rail-item" data-chapter="6"><i>07</i><span>Your visit</span></a>
+    </div>
+    <div class="rail-progress"><span></span></div>
+  </aside>
+  <main>
+    <section class="scene-section hero" id="home" data-scene="0">
+      <div class="hero-meta"><span>41°53′24″N &nbsp; 12°29′32″E</span><span>ROMA · 117 CE</span></div>
+      <div class="hero-copy"><p class="eyebrow"><span class="eyebrow-line"></span> AURELIA MUSEUM PRESENTS</p><h1>ROME,<br /><em>remembered.</em></h1><p class="hero-sub">A city built in stone.<br />A thousand lives written in its light.</p><a class="round-link" href="#city"><span>ENTER THE CITY</span><b>↓</b></a></div>
+      <div class="hero-side-note">AN IMMERSIVE EXHIBITION<br />THROUGH THE ETERNAL CITY</div>
+      <div class="scroll-cue"><span>SCROLL TO TRAVEL</span><i></i></div>
+      <div class="hero-index"><span>01</span><span class="index-rule"></span><span>07</span></div>
+    </section>
+    <section class="scene-section city-section" id="city" data-scene="1">
+      <div class="section-counter">I &nbsp;—&nbsp; THE CITY</div>
+      <div class="city-copy"><p class="eyebrow">BEYOND THE WALLS</p><h2>Every road<br />led <em>here.</em></h2><p>At first light, the gates open. Merchants, senators, poets — all drawn toward the restless heart of an empire.</p><a class="text-link" href="#colosseum">FOLLOW THE VIA SACRA <span>↗</span></a></div>
+      <div class="annotation annotation-one"><span class="annotation-dot"></span><span>PORTA MAGGIORE</span></div>
+      <div class="annotation annotation-two"><span class="annotation-dot"></span><span>THE SEVEN HILLS</span></div>
+      <div class="vertical-caption">A CITY OF ONE MILLION STORIES</div>
+    </section>
+    <section class="scene-section life-section" id="life" data-scene="1.5">
+      <div class="section-counter">II &nbsp;—&nbsp; THE EVERYDAY</div>
+      <div class="life-intro"><p class="eyebrow">NOT JUST AN EMPIRE</p><h2>A million<br /><em>ordinary</em><br />miracles.</h2><p>Rome was not only made by emperors. It was morning bread, cool water, a neighbour calling from the next insula.</p></div>
+      <div class="life-details">
+        <article class="life-detail"><span class="detail-number">01 / THE BAKER</span><h3>Before<br />the sun.</h3><p>At dawn, the ovens were already warm. More than 250 bakeries fed a city that never slept.</p><span class="detail-mark">PANIS</span></article>
+        <article class="life-detail"><span class="detail-number">02 / THE AQUEDUCT</span><h3>Water,<br />everywhere.</h3><p>Eleven aqueducts carried fresh water to fountains, baths and the kitchens of the seven hills.</p><span class="detail-mark">AQUA</span></article>
+        <article class="life-detail"><span class="detail-number">03 / THE INSULA</span><h3>Room<br />to rise.</h3><p>Above the busy streets, ordinary Romans built their lives floor by floor, close to the sky.</p><span class="detail-mark">DOMUS</span></article>
+      </div>
+      <a class="life-next" href="#colosseum">AND THEN, THE CROWD <span>↓</span></a>
+    </section>
+    <section class="scene-section colosseum-section" id="colosseum" data-scene="2">
+      <div class="section-counter">III &nbsp;—&nbsp; THE ARENA</div>
+      <div class="colosseum-copy"><p class="eyebrow">A STAGE FOR THE WORLD</p><h2>Stone that<br /><em>held its breath.</em></h2><p>Fifty thousand voices. A single held breath. Enter the arena where the fate of gladiators and emperors became one.</p><a class="circle-cta" href="#forum" aria-label="Continue to the Forum">CONTINUE <span>↓</span></a></div>
+      <div class="arena-quote"><span class="quote-mark">“</span><p>While the Colosseum stands,<br />Rome shall stand.</p><small>— Bede, 8TH CENTURY</small></div>
+      <div class="section-footnote">FLAVIAN AMPHITHEATRE · COMPLETED 80 CE</div>
+    </section>
+    <section class="scene-section forum-section" id="forum" data-scene="3">
+      <div class="section-counter">IV &nbsp;—&nbsp; THE FORUM</div>
+      <div class="forum-copy"><p class="eyebrow">WHERE THE EMPIRE SPOKE</p><h2>All roads.<br /><em>One story.</em></h2><p>At the edge of day, the Forum returns to quiet. Walk among the columns where the republic found its voice.</p></div>
+      <div class="artifact-note"><span class="artifact-line"></span><span>THE TEMPLE OF SATURN<br /><small>DEDICATED 497 BCE</small></span></div>
+      <div class="sun-dial"><span>THE DAY<br />UNFOLDS</span><i></i></div>
+      <div class="forum-bottom"><span>IV · 476 CE</span><span>THE EMPIRE FADES. THE CITY REMAINS.</span><span>ROMA AETERNA</span></div>
+    </section>
+    <section class="scene-section legacy-section" id="legacy" data-scene="3.5">
+      <div class="section-counter">V &nbsp;—&nbsp; WHAT REMAINS</div>
+      <div class="legacy-mark" aria-hidden="true">SPQR</div>
+      <div class="legacy-copy"><p class="eyebrow">THE CITY OUTLIVES THE EMPIRE</p><h2>Some things<br />refuse to <em>fall.</em></h2><p>Empires end. Their stories keep travelling. In every language, every stone, a little of Rome is still becoming.</p><div class="legacy-coordinates"><span>ROMA AETERNA</span><span>41°53′24″ N &nbsp; 12°29′32″ E</span></div></div>
+      <div class="legacy-date"><span>753 BCE</span><i>—</i><span>2026</span><small>YEARS, STILL COUNTING</small></div>
+    </section>
+    <section class="scene-section tickets-section" id="tickets" data-scene="4">
+      <div class="section-counter">VI &nbsp;—&nbsp; YOUR VISIT</div>
+      <div class="ticket-heading"><p class="eyebrow">THE CITY IS STILL HERE</p><h2>Come closer<br /><em>to the story.</em></h2><p>One exhibition. Twenty-eight centuries. Your place in the story starts here.</p></div>
+      <div class="visit-layout">
+        <div class="ticket-options" role="group" aria-label="Choose your ticket">
+          <button class="ticket-card selected" type="button" aria-pressed="true" data-ticket="Standard" data-price="18"><span class="ticket-type">01 / GENERAL ENTRY</span><span class="ticket-name">The Wanderer</span><span class="ticket-detail">Full exhibition · 90 min</span><span class="ticket-price">€18 <small>/ PERSON</small></span><span class="ticket-select">SELECTED <b>✓</b></span></button>
+          <button class="ticket-card" type="button" aria-pressed="false" data-ticket="Audio guide" data-price="26"><span class="ticket-type">02 / WITH AUDIO GUIDE</span><span class="ticket-name">The Listener</span><span class="ticket-detail">Exhibition + narrated journey</span><span class="ticket-price">€26 <small>/ PERSON</small></span><span class="ticket-select">SELECT <b>＋</b></span></button>
+          <button class="ticket-card" type="button" aria-pressed="false" data-ticket="After hours" data-price="32"><span class="ticket-type">03 / AFTER HOURS</span><span class="ticket-name">The Night Owl</span><span class="ticket-detail">Golden hour · limited entry</span><span class="ticket-price">€32 <small>/ PERSON</small></span><span class="ticket-select">SELECT <b>＋</b></span></button>
+        </div>
+        <form class="booking-form" id="booking-form" novalidate>
+          <div class="form-top"><span>RESERVE YOUR PLACE</span><span>ROMA, ITALIA <i>✳</i></span></div>
+          <label for="email">YOUR EMAIL</label><input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
+          <div class="form-row"><div><label for="visit-date">DATE</label><input id="visit-date" name="date" type="date" required /></div><div><label for="guests">GUESTS</label><select id="guests" name="guests"><option value="1">01 person</option><option value="2">02 people</option><option value="3">03 people</option><option value="4">04 people</option><option value="5">05 people</option><option value="6">06 people</option></select></div></div>
+          <div class="form-total"><span>ESTIMATED TOTAL</span><strong id="booking-total" aria-live="polite">€18</strong></div>
+          <button type="submit" class="reserve-button"><span>RESERVE YOUR VISIT</span><span>↗</span></button>
+          <p class="form-note">Preview only · no payment will be collected.</p>
+          <div class="form-message" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+      <footer class="footer"><a class="wordmark footer-mark" href="#home"><span class="seal">A</span><span>AURELIA<small>MUSEUM · ROMA</small></span></a><span>MADE OF MEMORY, BUILT TO LAST.</span><span>© MMXXVI AURELIA MUSEUM</span></footer>
+    </section>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
