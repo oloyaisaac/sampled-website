@@ -16,11 +16,16 @@ const imageBase = import.meta.env.BASE_URL;
 const photoFiles = {
   threshold: 'rome-threshold.webp',
   via: 'rome-via-sacra.webp',
-  street: 'rome-street-life.webp',
-  approach: 'rome-colosseum-approach.webp',
-  entry: 'rome-colosseum-entry.webp',
-  passage: 'rome-colosseum-passage.webp',
-  arena: 'rome-arena-floor.webp',
+  approachNear: 'rome-approach-near.webp',
+  approachMid: 'rome-approach-mid.webp',
+  approachGate: 'rome-approach-gate.webp',
+  entry: 'rome-entry-threshold.webp',
+  passageMid: 'rome-passage-mid.webp',
+  passageArena: 'rome-passage-arena.webp',
+  arenaEntry: 'rome-arena-entry.webp',
+  arenaCenter: 'rome-arena-center.webp',
+  arenaExit: 'rome-arena-exit.webp',
+  exitApproach: 'rome-exit-approach.webp',
   exit: 'rome-colosseum-exit.webp',
   forum: 'rome-forum.webp'
 };
@@ -30,6 +35,7 @@ let renderedPair = '';
 let requestedPair = '';
 let pairRequest = 0;
 let blend = 0;
+let journeyProgress = 0;
 let scrollFrame = 0;
 
 function loadPhoto(name) {
@@ -53,11 +59,12 @@ function applyBlend(amount) {
   photoLayers[0].style.opacity = from === to ? '1' : String(1 - eased);
   photoLayers[1].style.opacity = from === to ? '0' : String(eased);
 
-  // A gentle forward push is tied to scroll position, not a timed animation.
-  const zoom = reducedMotion ? 0 : amount * 0.16;
-  const drift = reducedMotion ? 0 : amount * 1.3;
-  photoLayers[0].style.transform = `scale(${1 + zoom}) translate3d(0, ${-drift}%, 0)`;
-  photoLayers[1].style.transform = `scale(${1 + (reducedMotion ? 0 : (1 - amount) * 0.16)}) translate3d(0, ${reducedMotion ? 0 : (1 - amount) * 1.3}%, 0)`;
+  // Both layers share one scroll-driven camera move, so each frame handoff
+  // lands at the same scale and position instead of resetting between photos.
+  const progress = reducedMotion ? 0 : journeyProgress;
+  const transform = `scale(${1 + progress * 0.085}) translate3d(0, ${-progress * 1.5}%, 0)`;
+  photoLayers[0].style.transform = transform;
+  photoLayers[1].style.transform = transform;
 }
 
 function renderPhotoPair(from, to, amount) {
@@ -91,15 +98,23 @@ function rebuildTimeline() {
   };
   const colosseumTop = top('colosseum');
   const forumTop = top('forum');
+  const colosseumRunway = Math.max(innerHeight, forumTop - colosseumTop);
+  const atColosseum = (fraction, photo) => ({ at: colosseumTop + colosseumRunway * fraction, photo });
+
   timeline = [
     { at: top('home'), photo: 'threshold' },
     { at: top('city'), photo: 'via' },
-    { at: top('life'), photo: 'street' },
-    { at: colosseumTop, photo: 'approach' },
-    { at: colosseumTop + innerHeight * 0.2, photo: 'entry' },
-    { at: colosseumTop + innerHeight * 0.43, photo: 'passage' },
-    { at: colosseumTop + innerHeight * 0.68, photo: 'arena' },
-    { at: forumTop - innerHeight * 0.25, photo: 'exit' },
+    { at: top('life'), photo: 'approachNear' },
+    atColosseum(0, 'approachMid'),
+    atColosseum(0.08, 'approachGate'),
+    atColosseum(0.17, 'entry'),
+    atColosseum(0.29, 'passageMid'),
+    atColosseum(0.4, 'passageArena'),
+    atColosseum(0.51, 'arenaEntry'),
+    atColosseum(0.62, 'arenaCenter'),
+    atColosseum(0.73, 'arenaExit'),
+    atColosseum(0.84, 'exitApproach'),
+    atColosseum(0.92, 'exit'),
     { at: forumTop, photo: 'forum' }
   ].sort((a, b) => a.at - b.at);
 }
@@ -113,7 +128,12 @@ function renderJourney() {
   const to = timeline[Math.min(index + 1, timeline.length - 1)];
   const distance = Math.max(1, to.at - from.at);
   const amount = Math.max(0, Math.min(1, (position - from.at) / distance));
+  journeyProgress = Math.max(0, Math.min(1, (index + amount) / (timeline.length - 1)));
   renderPhotoPair(from.photo, to.photo, amount);
+  // Warm the next frame before it enters the crossfade, avoiding blank waits
+  // if the visitor scrolls quickly through the sequence.
+  const next = timeline[Math.min(index + 2, timeline.length - 1)];
+  loadPhoto(next.photo);
 }
 
 function updateJourney() {
