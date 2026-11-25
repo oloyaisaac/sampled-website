@@ -13,7 +13,7 @@ Vite binds to `0.0.0.0` for preview environments. Use `npm run build` to make a 
 
 ## Implementation notes
 
-- A coordinated set of locally generated, photorealistic frames creates one forward camera path from the city gate, along the Via Sacra, into the Colosseum, through its passage and arena, then out toward the Forum. Adjacent frames share architecture, perspective, lighting, and camera direction; scroll blends and moves through them as one longer shot.
+- A coordinated set of locally generated, photorealistic frames creates one forward camera path from a shadowed city gate along the Via Sacra, into the Colosseum, through its passage and arena, then out toward the Forum. The opening frame now matches the street ahead. Adjacent frames share architecture, perspective, lighting, and camera direction; eased crossfades and a lightly damped camera follow make scroll feel more like one continuous shot.
 - Italiana, DM Sans, and DM Mono are bundled locally so the design does not depend on a third-party font request.
 - The ticket form demonstrates client-side ticket/guest pricing, validation, and a reservation-preview success state. It does not store a booking or send email; the interface says so explicitly.
 

@@ -36,6 +36,9 @@ let requestedPair = '';
 let pairRequest = 0;
 let blend = 0;
 let journeyProgress = 0;
+let cameraPosition = window.scrollY;
+let targetScroll = window.scrollY;
+let lastFrameTime = 0;
 let scrollFrame = 0;
 
 function loadPhoto(name) {
@@ -119,9 +122,8 @@ function rebuildTimeline() {
   ].sort((a, b) => a.at - b.at);
 }
 
-function renderJourney() {
+function renderJourney(position = scrollY) {
   if (!timeline.length) return;
-  const position = scrollY;
   let index = 0;
   while (index < timeline.length - 2 && position >= timeline[index + 1].at) index++;
   const from = timeline[index];
@@ -136,26 +138,43 @@ function renderJourney() {
   loadPhoto(next.photo);
 }
 
-function updateJourney() {
+function updateJourney(position = scrollY) {
   let active = 0;
   const focus = innerHeight * 0.5;
   sections.forEach((section, index) => {
-    if (section.getBoundingClientRect().top <= focus) active = index;
+    const sectionTop = section.getBoundingClientRect().top + scrollY;
+    if (sectionTop <= position + focus) active = index;
   });
   railLinks.forEach((link, index) => link.classList.toggle('active', index === active));
-  renderJourney();
+  renderJourney(position);
 
   const maxScroll = Math.max(1, document.documentElement.scrollHeight - innerHeight);
-  const progress = Math.max(0, Math.min(1, scrollY / maxScroll));
+  const progress = Math.max(0, Math.min(1, position / maxScroll));
   document.documentElement.style.setProperty('--progress', `${progress * 100}%`);
 }
 
-function scheduleJourneyUpdate() {
-  if (scrollFrame) return;
-  scrollFrame = requestAnimationFrame(() => {
+function advanceJourney(time) {
+  const elapsed = lastFrameTime ? Math.min(time - lastFrameTime, 50) : 16.67;
+  lastFrameTime = time;
+  const follow = reducedMotion ? 1 : 1 - Math.exp(-elapsed / 85);
+  cameraPosition += (targetScroll - cameraPosition) * follow;
+
+  if (Math.abs(targetScroll - cameraPosition) < 0.35) {
+    cameraPosition = targetScroll;
+    updateJourney(cameraPosition);
     scrollFrame = 0;
-    updateJourney();
-  });
+    lastFrameTime = 0;
+    return;
+  }
+
+  updateJourney(cameraPosition);
+  scrollFrame = requestAnimationFrame(advanceJourney);
+}
+
+function scheduleJourneyUpdate() {
+  targetScroll = scrollY;
+  if (scrollFrame) return;
+  scrollFrame = requestAnimationFrame(advanceJourney);
 }
 
 if ('IntersectionObserver' in window) {
