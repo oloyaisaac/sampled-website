@@ -13,8 +13,7 @@ Vite binds to `0.0.0.0` for preview environments. Use `npm run build` to make a 
 
 ## Implementation notes
 
-- The primary scene is a custom Three.js Roman world with a scroll-linked camera path, shared low-poly geometry, instanced architecture, atmospheric lighting, and restrained dust particles.
-- A procedural 2D Canvas scene is kept as a fallback if WebGL is unavailable.
+- Four locally generated, photorealistic historical reconstructions replace the earlier low-poly and Canvas illustrations. Optimized WebP images crossfade with the scroll-led chapters.
 - Italiana, DM Sans, and DM Mono are bundled locally so the design does not depend on a third-party font request.
 - The ticket form demonstrates client-side ticket/guest pricing, validation, and a reservation-preview success state. It does not store a booking or send email; the interface says so explicitly.
 
