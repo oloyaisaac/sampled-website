@@ -15,22 +15,22 @@ An editorial, cinematic invitation to an imagined exhibition about ancient Rome.
 ## Art direction
 - **Palette:** midnight indigo, Roman terracotta, warm limestone, muted Egyptian blue, and sunset ochre. The scene moves gradually from cool pre-dawn to warm evening.
 - **Typography:** Italiana display faces for the monumental headlines; DM Sans for readable body copy; DM Mono for coordinates, labels and wayfinding.
-- **Composition:** large quiet type, restrained rules and annotations, generous negative space, fine film grain, and a layered Roman world. Avoid generic rounded-card UI.
-- **Motion:** scroll controls one continuous 3D camera journey; chapter navigation follows the visitor. Motion must respect reduced-motion preferences.
+- **Composition:** large quiet type, restrained rules and annotations, generous negative space, fine film grain, and photorealistic historical reconstructions of Roman streets, the Colosseum, and Forum. Avoid generic rounded-card UI.
+- **Motion:** the photographic scene crossfades with the active chapter; chapter navigation follows the visitor. Motion must respect reduced-motion preferences.
 
 ## Build and interaction constraints
-- Build the primary Roman world with Three.js: reused geometry and instanced buildings, columns, paving and arcade details. Cap mobile device pixel ratio at 1.25, keep geometry costs bounded, and target 60 fps on a mid-range phone; retain a 2D canvas illustration as the no-WebGL fallback.
+- Use locally bundled, optimized WebP scene imagery, with a dark contrast overlay behind text and responsive cover cropping. Avoid depending on WebGL or remote image requests.
 - Keep the site readable and usable from 375px wide through desktop. Keep chapter controls and booking inputs operable with touch and keyboard.
 - Ticket cards are selectable. The booking form validates email and a non-past date and reports a success message without pretending to send a real reservation to a server.
 - Use semantic sections, labelled inputs, and an announced form status.
 
 ## Acceptance checklist
 - [x] Seven distinct chapters with no placeholder copy.
-- [x] Scroll-driven 3D city world with dawn-to-sunset sky, fog, sun and camera path; 2D fallback remains available.
+- [x] Scroll-led, photorealistic Roman scenes with chapter-based image transitions.
 - [x] Ticket selection, email/date/guest inputs, validation, and success feedback.
 - [x] Responsive layout rules, touch navigation, and reduced-motion support.
 - [x] JavaScript syntax and repository whitespace checks pass.
 - [x] Interaction smoke test: ticket/guest total, invalid-email feedback, and reservation preview.
 - [x] Internal navigation links resolve and all seven chapters are present.
-- [x] Headless Chromium smoke test at desktop and 375px: WebGL initializes, no browser errors, no horizontal overflow, and ticket validation/confirmation works.
+- [x] Verify photorealistic scene transitions and booking interactions in headless Chromium at desktop and 375px; no browser errors or horizontal overflow.
 - [ ] Verify visual quality and frame rate on a physical mid-range phone.
