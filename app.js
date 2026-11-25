@@ -117,7 +117,7 @@ function rebuildTimeline() {
     atColosseum(0.62, 'arenaCenter'),
     atColosseum(0.73, 'arenaExit'),
     atColosseum(0.84, 'exitApproach'),
-    atColosseum(0.92, 'exit'),
+    atColosseum(0.9, 'exit'),
     { at: forumTop, photo: 'forum' }
   ].sort((a, b) => a.at - b.at);
 }
@@ -156,8 +156,16 @@ function updateJourney(position = scrollY) {
 function advanceJourney(time) {
   const elapsed = lastFrameTime ? Math.min(time - lastFrameTime, 50) : 16.67;
   lastFrameTime = time;
-  const follow = reducedMotion ? 1 : 1 - Math.exp(-elapsed / 85);
+  const follow = reducedMotion ? 1 : 1 - Math.exp(-elapsed / 115);
   cameraPosition += (targetScroll - cameraPosition) * follow;
+
+  // Keep the camera close enough to the page that fast scrolls never leave
+  // chapter text describing a scene the background has not reached yet.
+  if (!reducedMotion) {
+    const maxLag = Math.min(180, innerHeight * 0.22);
+    const remaining = targetScroll - cameraPosition;
+    if (Math.abs(remaining) > maxLag) cameraPosition = targetScroll - Math.sign(remaining) * maxLag;
+  }
 
   if (Math.abs(targetScroll - cameraPosition) < 0.35) {
     cameraPosition = targetScroll;
