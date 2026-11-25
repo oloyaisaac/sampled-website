@@ -16,7 +16,7 @@ An editorial, cinematic invitation to an imagined exhibition about ancient Rome.
 - **Palette:** midnight indigo, Roman terracotta, warm limestone, muted Egyptian blue, and sunset ochre. The scene moves gradually from cool pre-dawn to warm evening.
 - **Typography:** Italiana display faces for the monumental headlines; DM Sans for readable body copy; DM Mono for coordinates, labels and wayfinding.
 - **Composition:** large quiet type, restrained rules and annotations, generous negative space, fine film grain, and photorealistic historical reconstructions of Roman streets, the Colosseum, and Forum. Avoid generic rounded-card UI.
-- **Motion:** the photographic scene crossfades with the active chapter; chapter navigation follows the visitor. Motion must respect reduced-motion preferences.
+- **Motion:** scroll scrubs a continuous, forward-moving sequence of matched first-person scene frames—gate, Via Sacra, Colosseum entrance, interior passage, arena, exit, and Forum. Crossfades, subtle zoom, and camera drift follow scroll position; reduced motion disables the zoom/drift.
 
 ## Build and interaction constraints
 - Use locally bundled, optimized WebP scene imagery, with a dark contrast overlay behind text and responsive cover cropping. Avoid depending on WebGL or remote image requests.
@@ -26,7 +26,7 @@ An editorial, cinematic invitation to an imagined exhibition about ancient Rome.
 
 ## Acceptance checklist
 - [x] Seven distinct chapters with no placeholder copy.
-- [x] Scroll-led, photorealistic Roman scenes with chapter-based image transitions.
+- [x] Scroll-scrubbed first-person sequence from the city gate through the Colosseum and out toward the Forum, with continuous image blending, zoom, and drift.
 - [x] Ticket selection, email/date/guest inputs, validation, and success feedback.
 - [x] Responsive layout rules, touch navigation, and reduced-motion support.
 - [x] JavaScript syntax and repository whitespace checks pass.
